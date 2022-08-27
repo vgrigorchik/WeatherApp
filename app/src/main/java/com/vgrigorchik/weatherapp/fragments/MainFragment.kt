@@ -10,11 +10,16 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.FragmentActivity
+import com.android.volley.Request
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.google.android.material.tabs.TabLayoutMediator
 import com.vgrigorchik.weatherapp.R
 import com.vgrigorchik.weatherapp.adapters.VpAdapter
 import com.vgrigorchik.weatherapp.databinding.ActivityMainBinding
 import com.vgrigorchik.weatherapp.databinding.FragmentMainBinding
+
+const val API_KEY = "402f5b1dd4d74537b9a150439221908"
 
 class MainFragment : Fragment() {
     private val fList = listOf(
@@ -41,26 +46,44 @@ class MainFragment : Fragment() {
         checkPermission()
         init()
     }
+
     private fun init() = with(binding) {
         val adapter = VpAdapter(activity as FragmentActivity, fList)
         vp.adapter = adapter
-        TabLayoutMediator(tabLayout, vp) {
-            tab, pos -> tab.text = tList[pos]
+        TabLayoutMediator(tabLayout, vp) { tab, pos ->
+            tab.text = tList[pos]
         }.attach()
     }
 
-    private fun permissionListener(){
+    private fun permissionListener() {
         pLauncher = registerForActivityResult(
-            ActivityResultContracts.RequestPermission()){
+            ActivityResultContracts.RequestPermission()
+        ) {
             Toast.makeText(activity, "Permission is $it", Toast.LENGTH_LONG).show()
         }
     }
 
-    private fun checkPermission(){
-        if(!isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION))
+    private fun checkPermission() {
+        if (!isPermissionGranted(Manifest.permission.ACCESS_FINE_LOCATION))
             permissionListener()
         else return
         pLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
+
+    private fun requestWeatherData(city: String) {
+        val url = "https://api.weatherapi.com/v1/forecast.json?" +
+                "key=$API_KEY" +
+                "&q=$city&days=3&aqi=no&alerts=no\n"
+        val queue = Volley.newRequestQueue(context)
+        val request = StringRequest(
+            Request.Method.GET,
+            url,
+            { result ->
+            },
+            { error ->
+            }
+        )
+        queue.add(request)
     }
 
     companion object {
