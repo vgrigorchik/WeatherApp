@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import com.vgrigorchik.weatherapp.R
 import com.vgrigorchik.weatherapp.databinding.ListItemBinding
 
@@ -15,9 +16,12 @@ class WeatherAdapter: ListAdapter<WeatherModel, WeatherAdapter.Holder>(Comparato
         val binding = ListItemBinding.bind(view)
 
         fun bind(item: WeatherModel) = with(binding) {
+            val icon = "https:${item.imageUrl}"
+            val temp = "${item.currentTemp}°C"
             tvDate.text = item.time
             tvCondition.text = item.condition
-            tvTemp.text = item.currentTemp
+            tvTemp.text = temp
+            Picasso.get().load(icon).into(im)
         }
     }
 
