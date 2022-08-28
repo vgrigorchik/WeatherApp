@@ -17,7 +17,7 @@ class WeatherAdapter: ListAdapter<WeatherModel, WeatherAdapter.Holder>(Comparato
 
         fun bind(item: WeatherModel) = with(binding) {
             val icon = "https:${item.imageUrl}"
-            val temp = "${item.currentTemp}°C"
+            val temp = item.currentTemp.ifEmpty{"${item.maxTemp}°C / ${item.minTemp}"} + "°C"
             tvDate.text = item.time
             tvCondition.text = item.condition
             tvTemp.text = temp

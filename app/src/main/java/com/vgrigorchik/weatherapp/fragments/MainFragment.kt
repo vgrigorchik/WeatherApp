@@ -17,10 +17,8 @@ import com.android.volley.toolbox.Volley
 import com.google.android.material.tabs.TabLayoutMediator
 import com.squareup.picasso.Picasso
 import com.vgrigorchik.weatherapp.MainViewModel
-import com.vgrigorchik.weatherapp.R
 import com.vgrigorchik.weatherapp.adapters.VpAdapter
 import com.vgrigorchik.weatherapp.adapters.WeatherModel
-import com.vgrigorchik.weatherapp.databinding.ActivityMainBinding
 import com.vgrigorchik.weatherapp.databinding.FragmentMainBinding
 import org.json.JSONObject
 
@@ -96,7 +94,7 @@ class MainFragment : Fragment() {
     private fun requestWeatherData(city: String) {
         val url = "https://api.weatherapi.com/v1/forecast.json?" +
                 "key=$API_KEY" +
-                "&q=$city&days=3&aqi=no&alerts=no\n"
+                "&q=$city&days=3&lang=en&aqi=no&alerts=no"
         val queue = Volley.newRequestQueue(context)
         val request = StringRequest(
             Request.Method.GET,
@@ -133,6 +131,7 @@ class MainFragment : Fragment() {
             )
             list.add(item)
         }
+        model.liveDataList.value = list
         return list
     }
 
